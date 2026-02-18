@@ -52,10 +52,10 @@
                 EXPLORE THE UNKNOWN
             </div>
         </div>
-        <div id="status-tag" class="text-[8px] bg-stone-100 text-stone-500 px-2 py-1 rounded-md font-bold uppercase tracking-tighter">Ver 1.8.0 Stable</div>
+        <div id="status-tag" class="text-[8px] bg-stone-100 text-stone-500 px-2 py-1 rounded-md font-bold uppercase tracking-tighter">Ver 1.8.2</div>
     </header>
 
-    <nav class="sticky top-[108px] z-[90] bg-white border-b border-stone-50 overflow-hidden">
+    <nav class="sticky top-[108px] z-[90] bg-white border-b border-stone-50 overflow-hidden shadow-sm">
         <div class="flex overflow-x-auto px-4 no-scrollbar items-center h-14">
             <button onclick="scrollToSection('aurora-section')" class="px-6 flex-none active-scale"><span class="text-[10px] font-bold text-gray-800 tracking-[0.2em] uppercase">世界極光</span></button>
             <div class="w-[1px] h-3 bg-stone-200 flex-none opacity-50"></div>
@@ -147,14 +147,46 @@
                     const [title, date, price, img, stock, link, tags] = cols.slice(1).map(v => v ? v.replace(/"/g, '').trim() : "");
 
                     if (cat === '客人評論') {
-                        containers[cat].innerHTML += `<div class="flex-none w-[78vw] md:w-[320px] bg-white border border-stone-100 p-8 rounded-[2.5rem] shadow-sm ml-8 first:ml-0 snap-center"><div class="flex items-center space-x-4 mb-6"><img src="${img}" class="w-12 h-12 rounded-full object-cover border border-stone-50" onerror="this.src='https://i.pravatar.cc/100?u=${idx}'"><div><p class="font-bold text-sm text-gray-900">${title}</p><p class="text-[10px] text-stone-400 uppercase tracking-tight">${date}</p></div></div><p class="text-stone-600 text-[13px] leading-loose italic mb-6">"${price}"</p><div class="flex flex-wrap"><span class="text-[9px] bg-stone-50 text-stone-500 px-3 py-1.5 rounded-full font-bold uppercase tracking-widest border border-stone-100">${tags || '旅人實測'}</span></div></div>`;
+                        containers[cat].innerHTML += `
+                        <div class="flex-none w-[78vw] md:w-[320px] bg-white border border-stone-100 p-8 rounded-[2.5rem] shadow-sm ml-8 first:ml-0 snap-center">
+                            <div class="flex items-center space-x-4 mb-6">
+                                <img src="${img}" class="w-12 h-12 rounded-full object-cover border border-stone-50" onerror="this.src='https://i.pravatar.cc/100?u=${idx}'">
+                                <div>
+                                    <p class="font-bold text-sm text-gray-900">${title}</p>
+                                    <p class="text-[10px] text-stone-500 font-bold uppercase tracking-widest mt-0.5">${date || '2026 EXPLORER'}</p>
+                                </div>
+                            </div>
+                            <p class="text-stone-600 text-[13px] leading-loose italic mb-6">"${price}"</p>
+                            <div class="flex flex-wrap">
+                                <span class="text-[9px] bg-stone-50 text-stone-500 px-3 py-1.5 rounded-full font-bold uppercase tracking-widest border border-stone-100">${tags || '旅人實測'}</span>
+                            </div>
+                        </div>`;
                     } else {
                         const stockNum = parseInt(stock) || 0;
                         const stockTag = stockNum > 0 ? `<span class="bg-red-500 text-white text-[9px] px-2 py-1 rounded-full font-bold ml-2 animate-pulse">僅餘 ${stockNum} 席</span>` : '';
-                        containers[cat].innerHTML += `<div class="flex-none w-[85vw] md:w-[380px] relative rounded-[3.5rem] overflow-hidden ml-8 first:ml-0 bg-stone-100 shadow-2xl snap-center transition-all duration-500"><img src="${img}" class="w-full h-full object-cover" loading="lazy"><div class="absolute inset-0 card-gradient p-8 flex flex-col justify-end"><div class="flex items-center mb-4"><span class="bg-white/20 text-white text-[9px] px-3 py-1.5 rounded-full border border-white/20 uppercase font-bold tracking-widest">${tags || 'Exclusive'}</span>${stockTag}</div><button onclick="showPreview('${title}', '${price}')" class="text-left active-scale mb-6 focus:outline-none"><h3 class="text-white text-3xl font-bold mb-1 leading-tight">${title}</h3><p class="text-stone-300 text-[10px] tracking-[0.2em] uppercase mt-2 font-bold">查看亮點 ➔</p></button><button onclick="askDetails('${title}')" class="bg-white text-gray-900 w-full py-4 rounded-2xl text-[11px] font-bold uppercase tracking-[0.25em] shadow-lg active-scale border border-white">探索詳情 / 詢問</button></div></div>`;
+                        
+                        // 修復：在標題上方加入日期顯示
+                        const dateDisplay = date ? `<span class="bg-black/40 text-white text-[9px] px-3 py-1.5 rounded-full border border-white/20 uppercase font-bold tracking-widest flex items-center"><svg class="w-2.5 h-2.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>${date}</span>` : '';
+
+                        containers[cat].innerHTML += `
+                        <div class="flex-none w-[85vw] md:w-[380px] relative rounded-[3.5rem] overflow-hidden ml-8 first:ml-0 bg-stone-100 shadow-2xl snap-center transition-all duration-500">
+                            <img src="${img}" class="w-full h-full object-cover" loading="lazy">
+                            <div class="absolute inset-0 card-gradient p-8 flex flex-col justify-end">
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="bg-white/20 text-white text-[9px] px-3 py-1.5 rounded-full border border-white/20 uppercase font-bold tracking-widest">${tags || 'Exclusive'}</span>
+                                    ${dateDisplay}
+                                    ${stockTag}
+                                </div>
+                                <button onclick="showPreview('${title}', '${price}')" class="text-left active-scale mb-6 focus:outline-none">
+                                    <h3 class="text-white text-3xl font-bold mb-1 leading-tight">${title}</h3>
+                                    <p class="text-stone-300 text-[10px] tracking-[0.2em] uppercase mt-2 font-bold">查看亮點 ➔</p>
+                                </button>
+                                <button onclick="askDetails('${title}')" class="bg-white text-gray-900 w-full py-4 rounded-2xl text-[11px] font-bold uppercase tracking-[0.25em] shadow-lg active-scale border border-white">探索詳情 / 詢問</button>
+                            </div>
+                        </div>`;
                     }
                 });
-                status.innerText = '● 已同步雲端';
+                status.innerText = '● 已同步雲端數據';
             } catch (e) { status.innerText = '● 連接中'; }
         }
         initData();
